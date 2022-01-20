@@ -1,28 +1,17 @@
 {
-  "name": "cordova-plugin-ekoduo",
+  "name": "com.joangape.myfirstplugin",
   "version": "0.0.1",
-  "description": "Plugin created for Health Recovery Solutions from the EkoDuo Android sdk",
+  "description": "",
   "cordova": {
-    "id": "cordova-plugin-ekoduo",
+    "id": "com.joangape.myfirstplugin",
     "platforms": [
       "android"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/healthrecoverysolutions/cordova-plugin-ekoduo.git"
   },
   "keywords": [
     "ecosystem:cordova",
     "cordova-android"
   ],
-  "author": "Health Recovery Solutions",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/healthrecoverysolutions/cordova-plugin-ekoduo/issues"
-  },
-  "homepage": "https://github.com/healthrecoverysolutions/cordova-plugin-ekoduo#readme",
-  "dependencies": {
-    "cordova": "^10.0.0"
-  }
+  "author": "",
+  "license": "ISC"
 }
