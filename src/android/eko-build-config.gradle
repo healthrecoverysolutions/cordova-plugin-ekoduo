@@ -1,0 +1,62 @@
+repositories {
+    jcenter()
+    maven {
+                url 'https://maven.google.com/'
+                name 'Google'
+    }
+    flatDir {
+        dirs 'libs/android'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // jcenter()
+        maven { url 'https://jitpack.io' }
+        maven {
+            url = uri("https://maven.pkg.github.com/ekodevices/external-ekoconnect-android")
+            credentials {
+                username = "${artifactory_username}"
+                password = "${artifactory_password}"
+            }
+        }
+    }
+}
+
+dependencies {
+//    implementation(name:'ekoconnect-1.1.0', ext:'aar')
+//    implementation(name:'internal-eko-android-bluetooth-sdk-3.5.3', ext:'aar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
+  //  implementation 'androidx.core:core-ktx:1.5.0'
+//    implementation 'androidx.security:security-crypto:1.0.0-rc04'
+//    implementation "com.google.dagger:dagger:2.33"
+//    implementation 'com.google.dagger:dagger-lint-aar:2.33'
+//    implementation 'com.google.dagger:hilt-android:2.33-beta'
+//    implementation 'com.google.dagger:hilt-core:2.33-beta'
+    implementation 'com.ekodevices.library:ekoconnect:1.2.1'
+}
+
+
+
+
+// repositories {
+//     jcenter()
+//     maven {
+//                 url 'https://maven.google.com/'
+//                 name 'Google'
+//     }
+//     flatDir {
+//         dirs 'libs/android'
+//     }
+// }
+
+// dependencies {
+//     implementation(name:'ekoconnect-1.1.0', ext:'aar')
+//     implementation(name:'internal-eko-android-bluetooth-sdk-3.5.3', ext:'aar')
+//     implementation fileTree(dir: 'libs', include: ['*.jar'])
+//     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
+// }
+
