@@ -1,9 +1,9 @@
 {
-  "name": "com.joangape.myfirstplugin",
+  "name": "cordova.plugin.ekoduo",
   "version": "0.0.1",
   "description": "",
   "cordova": {
-    "id": "com.joangape.myfirstplugin",
+    "id": "cordova.plugin.ekoduo",
     "platforms": [
       "android"
     ]

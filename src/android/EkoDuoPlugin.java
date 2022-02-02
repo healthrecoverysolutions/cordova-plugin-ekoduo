@@ -1,4 +1,4 @@
-package com.joangape.myfirstplugin;
+package cordova.plugin.ekoduo;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +18,7 @@ import com.ekodevices.ekoconnect.eventlisteners.external.ECStreamListener;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,13 +29,15 @@ import kotlin.Unit;
 /**
  * This class echoes a string called from JavaScript.
  */
-public class MyFirstPlugin extends CordovaPlugin implements  ECDeviceScanListener, ECDeviceConnectListener, ECStreamListener {
+public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener, ECDeviceConnectListener, ECStreamListener {
 
     public static EkoConnect instance;
     public static ECDeviceScanListener ecDeviceScanListener;
     public static ECDeviceConnectListener ecDeviceConnectListener;
+    private CallbackContext deviceDiscoveredCallback;
+
     @Override
-    public boolean execute(String action, JSONArray     args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         Log.d("AB", "Execute with action " + action);
         if (action.equals("coolMethod")) {
             String message = args.getString(0);
@@ -45,16 +48,40 @@ public class MyFirstPlugin extends CordovaPlugin implements  ECDeviceScanListene
             nativeToast();
         } else if(action.equals("initializeSdk")) {
             Log.d("AB", "Initialize SDK -- ");
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-                public void run() {
-                    initializeSdk();
-                }
-            });
+//            Handler handler = new Handler(Looper.getMainLooper());
+//            handler.post(new Runnable() {
+//                public void run() {
+//                    initializeSdk();
+//                }
+//            });
+
+            cordova.getActivity().runOnUiThread(
+                new Runnable() {
+                    public void run() {
+                        initializeSdk();
+                    }
+                });
+
            // initializeSdk();
+//            cordova.getThreadPool().execute(new Runnable() {
+//                public void run() {
+// initializeSdk();
+//                }
+//        });
+        } else if(action.equals("startDeviceDiscovery")) {
+           // instance.setDeviceScanListener(this::foundDevice);
+         //   instance.getScannedDevicesLiveData().observeForever(this::foundDevice);
+            deviceDiscoveredCallback = callbackContext;
+            startDeviceDiscovery();
+            PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+            result.setKeepCallback(true);
+            callbackContext.sendPluginResult(result);
+        } else if(action.equals("connect")) {
+            instance.connect(scannedEkoDevice);
         }
         return false;
     }
+    ECScanResult scannedEkoDevice;
 
     private void coolMethod(String message, CallbackContext callbackContext) {
         if (message != null && message.length() > 0) {
@@ -80,13 +107,25 @@ public class MyFirstPlugin extends CordovaPlugin implements  ECDeviceScanListene
         Log.d("AB", "setting the scan listener ");
         instance.setDeviceScanListener(this::foundDevice);
         instance.getScannedDevicesLiveData().observeForever(this::foundDevice);
-        instance.getConnectedDeviceLiveData().observeForever(this::connectedToDevice);
-        instance.setConnectListener(ecDeviceConnectListener);
+       instance.getConnectedDeviceLiveData().observeForever(this::connectedToDevice);
+       instance.setConnectListener(ecDeviceConnectListener);
         Log.d("AB", "Starting Device Discovery  for Eko device");
+        // instance.startDeviceDiscovery();
+    }
+
+    public void startDeviceDiscovery(){
         instance.startDeviceDiscovery();
     }
 
-    // @Override
+    private JSONObject ekoDeviceToJSON(ECScanResult device) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("name", device.getName());
+        json.put("address", device.getAddress());
+        json.put("id", device.getAddress());
+        return json;
+    }
+
+     @Override
     public void foundDevice(@NonNull ECScanResult ecScanResult) {
         Log.d("AB", "Device found called ");
         if (instance != null && ecScanResult != null && !isDeviceConnected ) {
@@ -94,8 +133,20 @@ public class MyFirstPlugin extends CordovaPlugin implements  ECDeviceScanListene
             Log.d("AB", "Eko Device Found name " + ecScanResult.getName());
             Log.d("AB", "Eko Device Found address " + ecScanResult.getAddress());
             Log.d("AB", "Eko Device Found tyoe " + ecScanResult.getType().name());
+            try {
+            JSONObject scannedPeripheral = ekoDeviceToJSON(ecScanResult);
+            Log.d("AB", "Scanned peripheral  == " + scannedPeripheral.toString());
+            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, scannedPeripheral);
+            pluginResult.setKeepCallback(true);
+            deviceDiscoveredCallback.sendPluginResult(pluginResult);
 
-            instance.connect(ecScanResult);
+            //temporary till UI is not present
+                scannedEkoDevice = ecScanResult;
+            } catch (JSONException e) {
+                // This shouldn't happen, log and ignore
+                Log.e("AB", "Problem converting device to JSON", e);
+            }
+            // instance.connect(ecScanResult);
         }
     }
     boolean isDeviceConnected = false;
@@ -151,3 +202,5 @@ public class MyFirstPlugin extends CordovaPlugin implements  ECDeviceScanListene
 
 
 }
+
+
