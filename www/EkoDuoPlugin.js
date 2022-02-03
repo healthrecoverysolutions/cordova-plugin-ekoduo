@@ -33,23 +33,23 @@ function convertToNativeJS(object) {
 module.exports = {
     nativeToast: function (arg0, success, error) {
         cordova.exec(success, error, 'EkoDuoPlugin', 'nativeToast', [arg0]);
-    }//,
+    },
     
-    // initializeSdk: function(arg0, success, error) {
-    //       cordova.exec(success, error, 'EkoDuoPlugin', 'initializeSdk', [arg0]);
-    // },
+    initializeSdk: function(arg0, success, error) {
+          cordova.exec(success, error, 'EkoDuoPlugin', 'initializeSdk', [arg0]);
+    },
     
-    // startDeviceDiscovery: function (success, failure) {
-    //     cordova.exec(success, failure, 'EkoDuoPlugin', 'startDeviceDiscovery', []);
-    // },
+    startDeviceDiscovery: function (success, failure) {
+        cordova.exec(success, failure, 'EkoDuoPlugin', 'startDeviceDiscovery', []);
+    },
 
-    // connect: function (success, failure) {
-    //     cordova.exec( success, failure, 'EkoDuoPlugin', 'connect', []);
-    // }
+    connect: function (success, failure) {
+        cordova.exec( success, failure, 'EkoDuoPlugin', 'connect', []);
+    }
     
 };
 
-// module.exports.withPromises = {
-//     startDeviceDiscovery: module.exports.startDeviceDiscovery
-// };
+module.exports.withPromises = {
+    startDeviceDiscovery: module.exports.startDeviceDiscovery
+};
 
