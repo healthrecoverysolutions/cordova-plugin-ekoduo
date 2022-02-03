@@ -103,7 +103,9 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
     }
 
     public void startDeviceDiscovery(){
-        instance.startDeviceDiscovery();
+        if(!isDeviceConnected) { // this is temporary till we dont have a UI
+            instance.startDeviceDiscovery();
+        }
     }
 
     private JSONObject ekoDeviceToJSON(ECScanResult device) throws JSONException {
@@ -143,7 +145,7 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
 
     @Override
     public void connectedToDevice(@Nullable ECDevice ecDevice) {
-        Log.d("AB", "Connected to eko device");
+        Log.d("AB", "Connected to eko device " +ecDevice);
         isDeviceConnected = true;
         boolean startStreaming = false;
         if (ecDevice != null) {
