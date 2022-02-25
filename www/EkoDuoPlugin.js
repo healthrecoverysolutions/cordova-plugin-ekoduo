@@ -39,12 +39,20 @@ module.exports = {
           cordova.exec(success, error, 'EkoDuoPlugin', 'initializeSdk', [arg0]);
     },
 
-    startDeviceDiscovery: function (seconds, success, failure) {
+    startDeviceDiscovery: function (success, failure) {
         var successWrapper = function(peripheral) {
             convertToNativeJS(peripheral);
             success(peripheral);
         };
-        cordova.exec(successWrapper, failure, 'EkoDuoPlugin', 'startDeviceDiscovery', [seconds]);
+        cordova.exec(successWrapper, failure, 'EkoDuoPlugin', 'startDeviceDiscovery', []);
+    },
+
+    startDeviceDiscoveryForDuration: function (seconds, success, failure) {
+        var successWrapper = function(peripheral) {
+            convertToNativeJS(peripheral);
+            success(peripheral);
+        };
+        cordova.exec(successWrapper, failure, 'EkoDuoPlugin', 'startDeviceDiscoveryForDuration', [seconds]);
     },
 
     connect: function (arg0, success, failure) {
@@ -55,6 +63,7 @@ module.exports = {
 
 module.exports.withPromises = {
     startDeviceDiscovery: module.exports.startDeviceDiscovery,
+    startDeviceDiscoveryForDuration: module.exports.startDeviceDiscoveryForDuration,
     connect: module.exports.connect,
 };
 

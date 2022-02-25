@@ -70,13 +70,21 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
             if (instance != null) { // only if instance has been initialized
                 Log.d("AB", "Start device discovery " + callbackContext);
                 deviceDiscoveredCallback = callbackContext;
-                int scanForSeconds = args.getInt(0);
-                Log.d("AB", "scan for seconds ? " + scanForSeconds);
-                startDeviceDiscovery(callbackContext, scanForSeconds);
+                startDeviceDiscovery(callbackContext);
 
             }
             return true;
-        }else if (action.equals("connect")) {
+        } else if(action.equals("startDeviceDiscoveryForDuration")) {
+            if (instance != null) { // only if instance has been initialized
+                Log.d("AB", "Start device discovery " + callbackContext);
+                deviceDiscoveredCallback = callbackContext;
+                int scanForSeconds = args.optInt(0);
+                Log.d("AB", "scan for seconds ? " + scanForSeconds);
+                startDeviceDiscoveryForDuration(callbackContext, scanForSeconds);
+
+            }
+            return true;
+        } else if (action.equals("connect")) {
             if(instance!=null) {
                 // instance.stopDeviceDiscovery(); // decide whether this should be exposed to ionic and done from there
                 connectCallback = callbackContext;
@@ -88,12 +96,16 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
                     + " " + deviceToConnect.getRssi());
                 ECScanResult originalDeviceObject = scannedPeripherals.get(deviceToConnect.getAddress());
                 Log.d("AB", "Original object to connect ? " + originalDeviceObject);
-                instance.connect(originalDeviceObject);
+                if (originalDeviceObject!=null) {
+                    instance.connect(originalDeviceObject);
 
-                PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
-                result.setKeepCallback(true);
-                Log.d("AB", "Callback context to send the plugin result for CONNECT " + callbackContext);
-                callbackContext.sendPluginResult(result);
+                    PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+                    result.setKeepCallback(true);
+                    Log.d("AB", "Callback context to send the plugin result for CONNECT " + callbackContext);
+                    callbackContext.sendPluginResult(result);
+                } else {
+                    Log.d("AB", "Tried to connect to a null instance of eko ");
+                }
 
             }
             return true;
@@ -121,9 +133,17 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
         Log.d("AB", "Eko SDK Initialized");
     }
 
-    public void startDeviceDiscovery(CallbackContext callbackContext, int scanSeconds){
+    public void startDeviceDiscovery(CallbackContext callbackContext){
+       instance.startDeviceDiscovery();
 
+        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+        result.setKeepCallback(true);
+        Log.d("AB", "Callback context to send the plugin result for scan " + callbackContext);
+        callbackContext.sendPluginResult(result);
+        // }
+    }
 
+    public void startDeviceDiscoveryForDuration(CallbackContext callbackContext, int scanSeconds){
         instance.startDeviceDiscovery();
 
         if (scanSeconds > 0) {
