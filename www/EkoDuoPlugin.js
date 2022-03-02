@@ -57,6 +57,10 @@ module.exports = {
 
     connect: function (arg0, success, failure) {
         cordova.exec(success, failure, 'EkoDuoPlugin', 'connect', [arg0]);
+    },
+
+    isConnected: function (arg0, success, failure) {
+        cordova.exec(success, failure, 'EkoDuoPlugin', 'isConnected', [arg0]);
     }
     
 };
@@ -65,5 +69,6 @@ module.exports.withPromises = {
     startDeviceDiscovery: module.exports.startDeviceDiscovery,
     startDeviceDiscoveryForDuration: module.exports.startDeviceDiscoveryForDuration,
     connect: module.exports.connect,
+    isConnected: module.exports.isConnected,
 };
 
