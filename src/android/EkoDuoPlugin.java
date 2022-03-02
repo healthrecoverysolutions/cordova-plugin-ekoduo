@@ -44,6 +44,7 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
     boolean isDeviceConnected = false;
     // key is the MAC Address
     private Map<String, ECScanResult> scannedPeripherals = new LinkedHashMap<String, ECScanResult>();
+    private Map<String, ECDevice> connectedPeripherals = new LinkedHashMap<String, ECDevice>();
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -110,6 +111,20 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
             }
             return true;
 
+        } else if (action.equals("isConnected")) {
+            if (instance!=null) {
+                Log.d("AB", "Is connected call for device ");
+                String macAddress = args.getString(0);
+
+                if (connectedPeripherals.containsKey(macAddress) && connectedPeripherals.get(macAddress).getPaired()) {
+                    Log.d("AB", "DEVICE  " + macAddress + " is connected TRUE ");
+                    callbackContext.success();
+                } else {
+                    Log.d("AB", "DEVICE  " + macAddress + " is connected FALSE ");
+                    callbackContext.error("Not connected.");
+                }
+
+            }
         }
         return false;
     }
@@ -237,8 +252,10 @@ public class EkoDuoPlugin extends CordovaPlugin implements  ECDeviceScanListener
         public void connectedToDevice(@Nullable ECDevice ecDevice) {
             Log.d("AB", "Connected to eko device " +ecDevice);
 
-            if (ecDevice != null) {
-
+            if (ecDevice != null && !connectedPeripherals.containsKey(ecDevice.getAddress())) {
+                Log.d("AB", "Added peripheral to connected peripherals");
+                ecDevice.setPaired(true);
+                connectedPeripherals.put(ecDevice.getAddress(), ecDevice);
                 isDeviceConnected = true;
                 boolean startStreaming = false;
                 Log.d("AB", "Device is connected and ready to transmit " + ecDevice.getAddress());
