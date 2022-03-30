@@ -2,7 +2,7 @@
 "use strict";
 
 var stringToArrayBuffer = function(str) {
-    var ret = new Uint8Array(str.length);
+    var ret = new UInt8Array(str.length);
     for (var i = 0; i < str.length; i++) {
         ret[i] = str.charCodeAt(i);
     }
@@ -61,8 +61,17 @@ module.exports = {
 
     isConnected: function (arg0, success, failure) {
         cordova.exec(success, failure, 'EkoDuoPlugin', 'isConnected', [arg0]);
-    }
-    
+    },
+
+    startStreaming: function(success, failure) {
+        cordova.exec(success, failure, 'EkoDuoPlugin', 'startStreaming', []);
+    },
+
+     startRecording: function (seconds, success, failure) {
+            cordova.exec(success, failure, 'EkoDuoPlugin', 'startRecording', [seconds]);
+     },
+
+
 };
 
 module.exports.withPromises = {
@@ -70,5 +79,7 @@ module.exports.withPromises = {
     startDeviceDiscoveryForDuration: module.exports.startDeviceDiscoveryForDuration,
     connect: module.exports.connect,
     isConnected: module.exports.isConnected,
+    startStreaming: module.exports.startStreaming,
+    startRecording: module.exports.startRecording,
 };
 
