@@ -12,6 +12,7 @@
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
         <source-file src="src/android/EkoDuoPlugin.java" target-dir="src/cordova/plugin/ekoduo/EkoDuoPlugin" />
+        <source-file src="src/android/DataCoordinator.java" target-dir="src/cordova/plugin/ekoduo/EkoDuoPlugin" />
         <framework custom="true" src="src/android/eko-build-config.gradle" target-dir="." type="gradleReference" />
     </platform>
 </plugin>
