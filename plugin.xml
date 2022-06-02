@@ -15,4 +15,23 @@
         <source-file src="src/android/DataCoordinator.java" target-dir="src/cordova/plugin/ekoduo/EkoDuoPlugin" />
         <framework custom="true" src="src/android/eko-build-config.gradle" target-dir="." type="gradleReference" />
     </platform>
+     <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="EkoDuoPlugin">
+                <param name="ios-package" value="EkoDuoPlugin" />
+            </feature>
+        </config-file>
+        <source-file src="src/ios/EkoDuoPlugin.swift" />
+        <podspec>
+            <config>
+                <source url="git@github.com/EkoDevices/EkoConnect-external.git"/>
+            </config>
+            <pods use-frameworks="true">
+                    <pod name="SocketRocket" spec="~> 0.5.1" />
+                    <pod name="TensorFlowLiteSwift" spec="~> 2.2.0" />
+                    <pod name="SwiftLint" />
+                    <pod name="EkoConnect" spec="~> 1.4.0" />
+            </pods>
+        </podspec>
+    </platform>
 </plugin>

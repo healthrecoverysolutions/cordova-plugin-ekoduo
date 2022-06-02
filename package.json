@@ -5,12 +5,14 @@
   "cordova": {
     "id": "cordova.plugin.ekoduo",
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   },
   "keywords": [
     "ecosystem:cordova",
-    "cordova-android"
+    "cordova-android",
+    "cordova-ios"
   ],
   "author": "",
   "license": "ISC"
