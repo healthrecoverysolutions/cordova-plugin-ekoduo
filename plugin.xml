@@ -25,15 +25,19 @@
         <source-file src="src/ios/EkoDuoPlugin.swift" />
         <podspec>
             <config>
-                        <source url="git@github.com:EkoDevices/EkoConnect-external.git" />
+                <source url="git@github.com:EkoDevices/EkoConnect-external.git" />
+                <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
             <pods use-frameworks="true">
-                    <pod name="SocketRocket" spec="~> 0.5.1" />
-                    <pod name="CocoaLumberjack/Swift" spec="~> 3.6.0" />
-                    <pod name="TensorFlowLiteSwift" spec="~> 2.2.0" />
+                    <pod name="SocketRocket" />
                     <pod name="SwiftLint" />
                     <pod name="EkoConnect" spec="~> 1.2.0" />
+                    <pod name="TensorFlowLiteSwift" spec="~> 2.9.1" />
+                    <pod name="CocoaLumberjack/Swift" spec="~> 3.6.0" />
             </pods>
         </podspec>
     </platform>
 </plugin>
+
+
+
